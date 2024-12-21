@@ -1,0 +1,9 @@
+(library
+ (name ocaml_calculus)
+ (public_name ocaml_calculus)
+ (modules lexer types parser)
+ (libraries re)
+ (inline_tests))
+(env
+ (dev
+  (flags (:standard -w -A))))
