@@ -33,14 +33,7 @@ type var = string
 
 
 type expr = 
-  | Var of string       (* e.g. x *)
-  | Const of float      (* e.g. 3.14 *)
-  | Add of expr * expr  (* e.g. x + 3.14 *)
-  | Sub of expr * expr  (* e.g. x - 3.14 *)
-  | Mul of expr * expr  (* e.g. x * 3.14 *)
-  | Div of expr * expr  (* e.g. x / 3.14 *)
-  | Pow of expr * expr  (* e.g. x ^ 3.14 *)
-  | Sin of expr         (* e.g. sin(x) *)
-  | Cos of expr         (* e.g. cos(x) *)
-
-  
+  | Var of string                   (* e.g. x *)
+  | Const of float                  (* e.g. 3.14 *)
+  | BinOp of op * expr * expr       (* e.g. x + 3.14 *)
+  | UnaryOp of op * expr            (* e.g. sin x *)
