@@ -4,7 +4,8 @@ let rec tokenize input =
   let input = String.trim input in
   let len = String.length input in
 
-  let re_num = Re.compile(Re.Perl.re"^(\\d+(.\\d+)*)|(\\(-\\d+(.\\d+)*\\))") in
+  let re_float = Re.compile(Re.Perl.re"^([0-9]+\\.[0-9]+)|(\\(-[0-9]\\.[0-9]\\))") in
+  let re_int = Re.compile(Re.Perl.re"(^[0-9]+)|(^\\(-[0-9]+\\))") in
   let re_rparen = Re.compile(Re.Perl.re"^\\)") in
   let re_lparen = Re.compile(Re.Perl.re"^\\(") in
   let re_add = Re.compile(Re.Perl.re"^\\+") in
@@ -17,16 +18,26 @@ let rec tokenize input =
   let re_var = Re.compile(Re.Perl.re"^[a-z]") in
 
   if input = "" then []
-  else if Re.execp re_num input then
-    let numgroup = Re.exec re_num input in
+  else if Re.execp re_float input then
+    let numgroup = Re.exec re_float input in
     let num = Re.Group.get numgroup 0 in
     let numlen = String.length num in
     if String.get num 0 = '(' then
-      let res = Float.of_string (String.sub num 1 (numlen - 2)) in
-      Tok_Const(res) :: tokenize (String.sub input numlen (len - numlen))
+      let res = float_of_string (String.sub num 1 (numlen - 2)) in
+      Tok_Const(Float res) :: tokenize (String.sub input numlen (len - numlen))
     else 
-      let res = Float.of_string num in
-      Tok_Const(res) :: tokenize (String.sub input numlen (len - numlen))
+      let res = float_of_string num in
+      Tok_Const(Float res) :: tokenize (String.sub input numlen (len - numlen))
+  else if Re.execp re_int input then
+    let numgroup = Re.exec re_int input in
+    let num = Re.Group.get numgroup 0 in
+    let numlen = String.length num in
+    if String.get num 0 = '(' then
+      let res = int_of_string (String.sub num 1 (numlen - 2)) in
+      Tok_Const(Int res) :: tokenize (String.sub input numlen (len - numlen))
+    else 
+      let res = int_of_string num in
+      Tok_Const(Int res) :: tokenize (String.sub input numlen (len - numlen))
     else if Re.execp re_rparen input then
       Tok_RParen :: tokenize (String.sub input 1 (len - 1))
     else if Re.execp re_lparen input then

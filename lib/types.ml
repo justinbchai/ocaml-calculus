@@ -1,6 +1,7 @@
 (* lexer types *)
 exception InvalidInputException of string
 
+type const = Int of int | Float of float
 
 type token =
   | Tok_RParen
@@ -13,7 +14,7 @@ type token =
   | Tok_Sin
   | Tok_Cos
   | Tok_Var of string
-  | Tok_Const of float
+  | Tok_Const of const
 
 
 
@@ -29,11 +30,10 @@ type op =
   | Sin
   | Cos
 
-type var = string
 
 
 type expr = 
-  | Var of string                   (* e.g. x *)
-  | Const of float                  (* e.g. 3.14 *)
-  | BinOp of op * expr * expr       (* e.g. x + 3.14 *)
-  | UnaryOp of op * expr            (* e.g. sin x *)
+  | Var of string                         (* e.g. x *)
+  | Const of const                        (* e.g. 3.14 *)
+  | BinOp of op * expr * expr             (* e.g. x + 3.14 *)
+  | UnaryOp of op * expr                  (* e.g. sin x *)
