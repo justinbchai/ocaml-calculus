@@ -13,6 +13,7 @@ type token =
   | Tok_Pow
   | Tok_Sin
   | Tok_Cos
+  | Tok_Log
   | Tok_Var of string
   | Tok_Const of const
 
@@ -29,6 +30,7 @@ type op =
   | Pow
   | Sin
   | Cos
+  | Log
 
 
 
