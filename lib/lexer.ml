@@ -6,6 +6,7 @@ let rec tokenize input =
 
   let re_float = Re.compile(Re.Perl.re"^([0-9]+\\.[0-9]+)|(\\(-[0-9]\\.[0-9]\\))") in
   let re_int = Re.compile(Re.Perl.re"(^[0-9]+)|(^\\(-[0-9]+\\))") in
+  let re_consts = Re.compile(Re.Perl.re"^(e|pi)|(\\(-(e|pi)\\))") in
   let re_rparen = Re.compile(Re.Perl.re"^\\)") in
   let re_lparen = Re.compile(Re.Perl.re"^\\(") in
   let re_add = Re.compile(Re.Perl.re"^\\+") in
@@ -15,7 +16,8 @@ let rec tokenize input =
   let re_pow = Re.compile(Re.Perl.re"^\\^") in
   let re_sin = Re.compile(Re.Perl.re"^sin") in
   let re_cos = Re.compile(Re.Perl.re"^cos") in
-  let re_var = Re.compile(Re.Perl.re"^[a-z]") in
+  let re_var = Re.compile(Re.Perl.re"^[a-df-z]") in
+  let re_log = Re.compile(Re.Perl.re"^log") in
 
   if input = "" then []
   else if Re.execp re_float input then
@@ -38,6 +40,15 @@ let rec tokenize input =
     else 
       let res = int_of_string num in
       Tok_Const(Int res) :: tokenize (String.sub input numlen (len - numlen))
+    else if Re.execp re_consts input then
+      let constgroup = Re.exec re_consts input in
+      let const = Re.Group.get constgroup 0 in
+      let constlen = String.length const in
+      if String.get const 0 = '(' then
+        let res = String.sub const 1 (constlen - 2) in
+        Tok_Const(String res) :: tokenize (String.sub input constlen (len - constlen))
+      else
+        Tok_Const(String const) :: tokenize (String.sub input constlen (len - constlen))
     else if Re.execp re_rparen input then
       Tok_RParen :: tokenize (String.sub input 1 (len - 1))
     else if Re.execp re_lparen input then
@@ -52,6 +63,8 @@ let rec tokenize input =
       Tok_Div :: tokenize (String.sub input 1 (len - 1))
     else if Re.execp re_pow input then
       Tok_Pow :: tokenize (String.sub input 1 (len - 1))
+    else if Re.execp re_log input then
+      Tok_Log :: tokenize (String.sub input 3 (len - 3))
     else if Re.execp re_sin input then
       Tok_Sin :: tokenize (String.sub input 3 (len - 3))
     else if Re.execp re_cos input then

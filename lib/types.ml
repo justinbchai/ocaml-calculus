@@ -1,7 +1,7 @@
 (* lexer types *)
 exception InvalidInputException of string
 
-type const = Int of int | Float of float
+type const = Int of int | Float of float | String of string
 
 type token =
   | Tok_RParen
