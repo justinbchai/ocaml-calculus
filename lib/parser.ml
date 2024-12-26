@@ -53,7 +53,7 @@
     | _ -> t1, e1
 
   and parse_mul toks =
-    let t1, e1 = parse_pow toks in
+    let t1, e1 = parse_log toks in
     match lookahead t1 with
     | Some Tok_Mul -> 
       let t2 = match_token t1 Tok_Mul in
@@ -65,8 +65,17 @@
       t3, BinOp (Div, e1, e2)
     | _ -> t1, e1
 
+  and parse_log toks =
+    match lookahead toks with
+    | Some Tok_Log ->
+      let t1 = match_token toks Tok_Log in
+      let t2, e1 = parse_log t1 in
+      let t3, e2 = parse_log t2 in
+      t3, BinOp (Log, e1, e2)
+    | _ -> parse_pow toks
+
   and parse_pow toks =
-    let t1, e1 = parse_log toks in
+    let t1, e1 = parse_trig toks in
     match lookahead t1 with
     | Some Tok_Pow -> 
       let t2 = match_token t1 Tok_Pow in
@@ -74,15 +83,6 @@
       t3, BinOp (Pow, e1, e2)
     | _ -> t1, e1
     
-    and parse_log toks =
-      match lookahead toks with
-      | Some Tok_Log ->
-        let t1 = match_token toks Tok_Log in
-        let t2, e1 = parse_log t1 in
-        let t3, e2 = parse_log t2 in
-        t3, BinOp (Log, e1, e2)
-      | _ -> parse_trig toks
-
   and parse_trig toks =
     match lookahead toks with
     | Some Tok_Sin -> 
