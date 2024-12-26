@@ -16,6 +16,7 @@
     | _ :: t, n when n > 0 -> lookahead_many t (n - 1)
     | _ -> None
 
+
   (* 
   CFG FOR MATH EXPRESSIONS
   Expr -> AddExpr
@@ -113,3 +114,9 @@
       let t3 = match_token t2 Tok_RParen in
       t3, e
     | _ -> raise (InvalidInputException ("Invalid input"))
+
+
+  let parse_shell toks =
+    let t, e = parse_expr toks in
+    if t = [] then e
+    else raise (InvalidInputException ("Invalid input"))
