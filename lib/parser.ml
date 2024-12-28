@@ -116,7 +116,7 @@
     | _ -> raise (InvalidInputException ("Invalid input"))
 
 
-  let parse_shell toks =
+  let parse toks =
     let t, e = parse_expr toks in
     if t = [] then e
     else raise (InvalidInputException ("Invalid input"))

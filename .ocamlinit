@@ -3,3 +3,4 @@ open Ocaml_calculus.Types
 open Ocaml_calculus.Lexer
 open Ocaml_calculus.Parser
 open Ocaml_calculus.Eval
+open Ocaml_calculus.Interface
