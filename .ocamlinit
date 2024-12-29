@@ -4,3 +4,4 @@ open Ocaml_calculus.Lexer
 open Ocaml_calculus.Parser
 open Ocaml_calculus.Eval
 open Ocaml_calculus.Interface
+open Ocaml_calculus.Optimizer

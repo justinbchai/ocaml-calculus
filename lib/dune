@@ -1,7 +1,7 @@
 (library
  (name ocaml_calculus)
  (public_name ocaml_calculus)
- (modules lexer types parser eval interface)
+ (modules lexer types parser eval interface optimizer)
  (libraries re)
  (inline_tests))
 (env
